@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frames Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="frame-container">
+        <iframe src="frame-image.html" name="leftFrame"></iframe>
+        <iframe src="frame-text.html" name="rightFrame"></iframe>
+        <a href="./index.html" class="menu-btn" style="position: absolute; bottom: 10px;">Back</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const buttons = document.querySelectorAll(".menu-btn");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    
+                    const audio = new Audio("/assets/music/sounds/click_back.wav");
+                    audio.volume = 0.1;
+                    audio.play();
+
+                    setTimeout(() => {
+                        window.location.href = button.href;
+                    }, 21);
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>

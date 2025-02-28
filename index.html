@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Single Page Application</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Переключатель языка -->
+  <div id="language-switcher">
+    <button data-lang="en">ENG</button>
+    <button data-lang="ru">РУС</button>
+    <button data-lang="uk">УКР</button>
+  </div>
+  
+  <!-- Меню, общее для всех разделов -->
+  <div class="menu-container">
+    <div class="img-container">
+      <!-- Изображения с художественными подсказками -->
+      <div class="img-item">
+        <span class="tooltip" data-i18n="tooltip1"></span>
+        <img src="./assets/img/todolist.png" alt="">
+      </div>
+      <div class="img-item">
+        <span class="tooltip" data-i18n="tooltip2"></span>
+        <img src="./assets/img/quiz.jpg" alt="">
+      </div>
+      <div class="img-item">
+        <span class="tooltip" data-i18n="tooltip3"></span>
+        <img src="./assets/img/frames.png" alt="">
+      </div>
+    </div>
+
+    <div class="btn-bar">
+      <!-- Используем ссылки с хешем и переводим текст кнопок -->
+      <a href="#todolist" class="menu-btn" data-i18n="menu-todolist"></a>
+      <a href="#quiz" class="menu-btn" data-i18n="menu-quiz"></a>
+      <a href="#frames" class="menu-btn" data-i18n="menu-frames"></a>
+    </div>
+  </div>
+
+  <!-- Контейнер для уведомления (общий для всех) -->
+  <div class="notification-wall" id="notification-wall">
+    <div id="notification" class="notification">
+      <div class="notification-content">
+        <h3 class="notification-title" data-i18n="notification-title"></h3>
+        <p class="notification-text" data-i18n="notification-text"></p>
+        <p class="notification-question" data-i18n="notification-question"></p>
+        <label>
+          <input type="checkbox" id="music-checkbox"> <span data-i18n="music-checkbox-label"></span>
+        </label>
+        <div>
+          <a class="menu-btn" id="confirm-button" data-i18n="confirm-button"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Фоновое аудио -->
+  <audio id="bg-music" loop>
+    <source src="/assets/music/bg_sound_1.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Контейнер для динамического контента -->
+  <div id="app"></div>
+
+  <!-- Шаблоны для страниц с переводимыми элементами -->
+  <template id="todolist-template">
+    <div class="todolist-container">
+      <h2 class="todolist-title" data-i18n="todolist-title"></h2>
+      <div class="todolist-wrapper">
+        <ul class="todolist">
+          <li class="todolist-item">
+            <input type="checkbox" class="todolist-checkbox">
+            <span class="todolist-text" data-i18n="todolist-item1"></span>
+          </li>
+          <li class="todolist-item">
+            <input type="checkbox" class="todolist-checkbox">
+            <span class="todolist-text" data-i18n="todolist-item2"></span>
+          </li>
+          <li class="todolist-item">
+            <input type="checkbox" class="todolist-checkbox">
+            <span class="todolist-text" data-i18n="todolist-item3"></span>
+          </li>
+        </ul>
+      </div>
+      <a href="#home" class="menu-btn" data-i18n="back-button"></a>
+    </div>
+  </template>
+
+  <template id="quiz-template">
+    <div class="quiz-container">
+      <h2 class="quiz-title" data-i18n="quiz-title"></h2>
+      <p class="quiz-question" data-i18n="quiz-question"></p>
+      <div class="questions-container">
+        <div class="question-answer-item" data-i18n="quiz-answer-option1"></div>
+        <div class="question-answer-item" data-i18n="quiz-answer-option2"></div>
+        <div class="question-answer-item" data-i18n="quiz-answer-option3"></div>
+      </div>
+      <a href="#home" class="menu-btn" data-i18n="back-button"></a>
+      <p class="quiz-answer"></p>
+    </div>
+  </template>
+  
+
+  <template id="frames-template">
+    <div class="frame-container">
+      <iframe src="frame-image.html" name="leftFrame"></iframe>
+      <iframe src="frame-text.html" name="rightFrame"></iframe>
+      <a href="#home" class="menu-btn" style="position: absolute; bottom: 10px;" data-i18n="back-button"></a>
+    </div>
+  </template>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+  // Объект с переводами (художественно)
+  const translations = {
+    en: {
+      'menu-todolist': 'To-do List',
+      'menu-quiz': 'Quiz',
+      'menu-frames': 'Frames',
+      'notification-title': 'Warning!',
+      'notification-text': 'This page is created for entertainment purposes.',
+      'notification-question': 'Would you like to play background music?',
+      'music-checkbox-label': 'Play music?',
+      'confirm-button': 'Confirm',
+      'todolist-title': 'To-do List:',
+      'todolist-item1': 'Save their country',
+      'todolist-item2': 'Save their souls',
+      'todolist-item3': 'Save their children',
+      'quiz-title': 'Quiz',
+      'quiz-question': 'How long do you think a soldier lives on the battlefield?',
+      'quiz-answer-correct': 'Correct!',
+      'quiz-answer-wrong': 'Wrong answer. Try again!',
+      'back-button': 'Back',
+      'tooltip1': 'There are <span class="green">things</span> that need to be saved no matter the <span class="pink-red">cost</span>.',
+      'tooltip2': 'The world doesn\'t have a history. It has a <span class="red">criminal record</span>.',
+      'tooltip3': 'Though men and women of the <span class="blue">Ukrai</span><span class="yellow">nian</span> homeland fight with everything they have, <span class="blue">Ukra</span><span class="yellow">ine</span> may still lose and extinct. <br><br>Perhaps this time, <span class="dark-red">forever</span>.',
+      'quiz-answer-option1': '2 months',
+    'quiz-answer-option2': '4 months',
+    'quiz-answer-option3': '6 months',
+    },
+    ru: {
+      'menu-todolist': 'Список дел',
+      'menu-quiz': 'Викторина',
+      'menu-frames': 'Окна',
+      'notification-title': 'Внимание!',
+      'notification-text': 'Страница создана для развлечения.',
+      'notification-question': 'Хотите максимального погружения?',
+      'music-checkbox-label': 'Включить музыку?',
+      'confirm-button': 'Подтвердить',
+      'todolist-title': 'Список дел:',
+      'todolist-item1': 'Спасите их страну',
+      'todolist-item2': 'Спасите их души',
+      'todolist-item3': 'Спасите их детей',
+      'quiz-title': 'Викторина',
+      'quiz-question': 'Сколько по вашему мнению живёт солдат на поле боя?',
+      'quiz-answer-correct': 'Верно!',
+      'quiz-answer-wrong': 'Неверный ответ. Попробуйте снова!',
+      'back-button': 'Назад',
+      'tooltip1': 'Есть <span class="green">то</span>, что должно быть сохранено <span class="pink-red">любой ценой</span>.',
+      'tooltip2': 'У мира нет истории, у него есть <span class="red">преступное прошлое</span>.',
+      'tooltip3': 'Хотя мужчины и женщины <span class="blue">Укра</span><span class="yellow">ины</span> отважно сражаются, <span class="blue">Укра</span><span class="yellow">ина</span> все равно может проиграть и исчезнуть. <br><br>Возможно, в этот раз — <span class="dark-red">навсегда</span>.',
+      'quiz-answer-option1': '2 месяца',
+      'quiz-answer-option2': '4 месяца',
+      'quiz-answer-option3': '6 месяцев',
+    },
+    uk: {
+  'menu-todolist': 'Список справ',
+  'menu-quiz': 'Вікторина',
+  'menu-frames': 'Вікна',
+  'notification-title': 'Увага!!',
+  'notification-text': 'Сторінка створена для розваг.',
+  'notification-question': 'Бажаєте максимального занурення?',
+  'music-checkbox-label': 'Увімкнути музику?',
+  'confirm-button': 'Підтвердити',
+  'todolist-title': 'Список справ:',
+  'todolist-item1': 'Врятуйте їхню країну',
+  'todolist-item2': 'Врятуйте їхні душі',
+  'todolist-item3': 'Врятуйте їхніх дітей',
+  'quiz-title': 'Вікторина',
+  'quiz-question': 'Скільки, на вашу думку, живе солдат на полі бою?',
+  'quiz-answer-correct': 'Вірно!',
+  'quiz-answer-wrong': 'Невірна відповідь. Спробуйте ще раз!',
+  'back-button': 'Назад',
+  'tooltip1': 'Є <span class="green">те</span>, що має бути збережено за<span class="pink-red">будь-яку ціну</span>.',
+  'tooltip2': 'У світу немає історії, у нього є <span class="red">злочинне минуле</span>.',
+  'tooltip3': 'Хоча чоловіки та жінки <span class="blue">Укра</span><span class="yellow">їни</span> відважно борються, <span class="blue">Укра</span><span class="yellow">їна</span> все одно може програти та зникнути. <br><br>Можливо, цього разу — <span class="dark-red">назавжди</span>.',
+  'quiz-answer-option1': '2 місяці',
+  'quiz-answer-option2': '4 місяці',
+  'quiz-answer-option3': '6 місяців',
+}
+
+  };
+
+  // Получаем выбранный язык или используем английский по умолчанию
+  let currentLang = localStorage.getItem("language") || "en";
+
+  function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      const key = el.getAttribute('data-i18n');
+      if (translations[currentLang] && translations[currentLang][key]) {
+        el.innerHTML = translations[currentLang][key];
+      }
+    });
+  }
+
+  // Обработчик переключателя языка
+  document.querySelectorAll('#language-switcher button').forEach(btn => {
+    btn.addEventListener('click', function() {
+      currentLang = this.getAttribute('data-lang');
+      localStorage.setItem("language", currentLang);
+      applyTranslations();
+    });
+  });
+
+  // Применяем переводы при загрузке страницы
+  applyTranslations();
+
+  const notificationWall = document.getElementById("notification-wall");
+  const musicNotification = document.getElementById("notification");
+  const musicCheckbox = document.getElementById("music-checkbox");
+  const confirmButton = document.getElementById("confirm-button");
+  const audio = document.getElementById("bg-music");
+
+  // Список фоновых треков
+  const musicTracks = [
+    "/assets/music/bg_sound_1.mp3",
+    "/assets/music/bg_sound_2.mp3",
+    "/assets/music/bg_sound_3.mp3"
+  ];
+
+  function getRandomTrack() {
+    return musicTracks[Math.floor(Math.random() * musicTracks.length)];
+  }
+
+  // Выбор случайного трека
+  audio.src = getRandomTrack();
+
+  const musicPreference = localStorage.getItem("musicEnabled");
+  let hoverSoundEnabled = false;
+
+  if (musicPreference === null) {
+    notificationWall.style.display = "block";
+    musicNotification.style.display = "block";
+  } else if (musicPreference === "true") {
+    audio.volume = 0.2;
+    audio.play();
+    hoverSoundEnabled = true;
+  }
+
+  confirmButton.addEventListener("click", function () {
+    const isMusicEnabled = musicCheckbox.checked;
+    localStorage.setItem("musicEnabled", isMusicEnabled.toString());
+    musicNotification.style.display = "none";
+    notificationWall.style.display = "none";
+
+    if (isMusicEnabled) {
+      audio.volume = 0.2;
+      audio.play();
+      hoverSoundEnabled = true;
+    } else {
+      audio.pause();
+      hoverSoundEnabled = false;
+    }
+  });
+
+  audio.addEventListener("play", function () {
+    localStorage.setItem("musicPlaying", "true");
+  });
+
+  audio.addEventListener("pause", function () {
+    localStorage.setItem("musicPlaying", "false");
+  });
+
+  if (localStorage.getItem("musicEnabled") === "true") {
+    musicCheckbox.checked = true;
+  }
+
+  function playSound(src, volume = 0.1) {
+    const sound = new Audio(src);
+    sound.volume = volume;
+    sound.play();
+  }
+
+  function addTodolistListeners() {
+    const buttons = document.querySelectorAll(".menu-btn");
+    const checkboxes = document.querySelectorAll(".todolist-checkbox");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        playSound("/assets/music/sounds/click_back.wav", 0.1);
+        setTimeout(() => {
+          window.location.hash = button.getAttribute('href').slice(1);
+          applyTranslations();
+        }, 21);
+      });
+    });
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener("change", function () {
+        playSound("/assets/music/sounds/decisions_ui_checkbox_01.wav", 0.3);
+      });
+    });
+  }
+
+  function addQuizListeners() {
+    const answers = document.querySelectorAll(".question-answer-item");
+    const resultText = document.querySelector(".quiz-answer");
+    const buttons = document.querySelectorAll(".menu-btn");
+
+    answers.forEach(answer => {
+      answer.addEventListener("click", function () {
+        playSound("/assets/music/sounds/click_ok.wav", 0.1);
+        if (this.textContent.trim() === "2 months" || this.textContent.trim() === "2 месяца" || this.textContent.trim() === "2 місяці") {
+          resultText.textContent = translations[currentLang]['quiz-answer-correct'];
+          resultText.style.color = "#2d9828";
+        } else {
+          resultText.textContent = translations[currentLang]['quiz-answer-wrong'];
+          resultText.style.color = "#920000";
+        }
+      });
+    });
+
+    buttons.forEach(button => {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        playSound("/assets/music/sounds/click_back.wav", 0.1);
+        setTimeout(() => {
+          window.location.hash = button.getAttribute('href').slice(1);
+          applyTranslations();
+        }, 21);
+      });
+    });
+  }
+
+  function addFrameListeners() {
+    const buttons = document.querySelectorAll(".menu-btn");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        playSound("/assets/music/sounds/click_back.wav", 0.1);
+        setTimeout(() => {
+          window.location.hash = button.getAttribute('href').slice(1);
+          applyTranslations();
+        }, 21);
+      });
+    });
+  }
+
+  function addHoverSoundListeners() {
+    document.querySelectorAll(".menu-btn").forEach(button => {
+      button.addEventListener("mouseenter", function () {
+        if (hoverSoundEnabled) {
+          const hoverSound = new Audio("/assets/music/sounds/click_mouse_over_01.wav");
+          hoverSound.volume = 0.5;
+          hoverSound.play().catch(err => console.warn("Autoplay blocked:", err));
+        }
+      });
+    });
+  }
+
+  function router() {
+    const hash = window.location.hash.slice(1) || 'home';
+    const app = document.getElementById('app');
+    const menuContainer = document.querySelector('.menu-container');
+
+    app.innerHTML = '';
+
+    if (hash === 'home') {
+      menuContainer.style.display = 'block';
+    } else {
+      menuContainer.style.display = 'none';
+    }
+
+    if (hash === 'todolist') {
+      const template = document.getElementById('todolist-template');
+      app.appendChild(template.content.cloneNode(true));
+      addHoverSoundListeners();
+      addTodolistListeners();
+      applyTranslations();
+    } else if (hash === 'quiz') {
+      const template = document.getElementById('quiz-template');
+      app.appendChild(template.content.cloneNode(true));
+      addHoverSoundListeners();
+      addQuizListeners();
+      applyTranslations();
+    } else if (hash === 'frames') {
+      const template = document.getElementById('frames-template');
+      app.appendChild(template.content.cloneNode(true));
+      addFrameListeners();
+      addHoverSoundListeners();
+      applyTranslations();
+    }
+  }
+
+  window.addEventListener('hashchange', router);
+  router();
+});
+  </script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+body {
+    background: url(./assets/img/background.jpg) no-repeat center center fixed;
+    background-size: cover;
+    font-family: "Aldrich", serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #C4C4C4;
+}
+#app {
+    width: 100%;
+    height: 100%;
+}
+.menu-container {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.img-container {
+    display: flex;
+    justify-content: center;
+    gap: 2px;  
+}
+.img-item {
+    position: relative;
+    width: 200px;
+    height: 250px;
+    display: inline-block;
+    padding: 3px;
+    border: 3px solid #414141; /* Темно-серый цвет металла */
+    border-radius: 8px; /* Закругление углов */
+    background: linear-gradient(145deg, #222, #555); /* Имитация металлического блеска */
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.2), 
+                inset -2px -2px 5px rgba(0, 0, 0, 0.7),
+                2px 2px 5px rgba(0, 0, 0, 0.5); /* Тени для объема */
+    /* overflow: hidden; */
+}
+.img-item img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.btn-bar {
+    display: flex;
+    justify-content: space-between; /* Выравнивание по центру */
+    gap: 10px; /* Отступ между кнопками */
+    background: #050f0f; /* Фон панели */
+    padding: 10px;
+    border: 5px solid #414141;
+    box-shadow: inset 0px 0px 4px #000;
+    border-radius: 0px 0px 10px 10px;
+    box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.7),
+    2px 2px 5px rgba(0, 0, 0, 0.5); /* Тени для объема */
+}
+
+.menu-btn {
+    width: 170px;
+    height: 23px;
+    text-align: center;
+    line-height: 25px;
+    position: relative;
+    display: inline-block;
+    color: #b5faff; /* Голубой неон */
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    border: 2px solid #0ff; /* Неоновая рамка */
+    background: #050f0f; /* Темный фон */
+    transition: 0.1s ease-in-out;
+}
+
+.menu-btn:hover {
+    color: #fff;
+    border: 2px solid #fff;
+    cursor: pointer;
+}
+.tooltip {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%); /* Выравнивание по центру */
+    border: 0.5px solid #0ff; /* Неоновая рамка */
+    background: #050f0f; /* Темный фон */
+    padding: 7px 5px;
+    transition: opacity 0.3s;
+    margin-bottom: 5px;
+    max-width: 300px;
+    width: max-content;
+}
+
+.img-item:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+.green {
+    color: #00ff00;
+}
+.blue {
+    color: #00aeff;
+}
+.yellow {
+    color: #d3c900;
+}
+.pink-red {
+    color: #ff8072;
+}
+.red {
+    color: #ff0000;
+}
+.dark-red {
+    color: #920000;
+}
+/* notification */
+.notification-wall {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000cc;
+}
+.notification {
+    width: 450px;
+    height: 225px;
+    z-index: 2;
+    border: 0.5px solid #0ff; /* Неоновая рамка */
+    background: #050f0f; /* Темный фон */
+    display: flex;
+    justify-content: center;
+}
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 15px;
+}
+.notification-title {
+    margin: 0;
+}
+.notification-text {
+    margin: 0;
+    padding: 0;
+
+}
+.notification-question {
+    margin: 0;
+}
+
+
+/* todolist */
+.todolist-container {
+    margin: 0 auto;
+    top: 20%;
+    width: 1000px;
+    height: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #050f0f; /* Фон панели */
+    padding: 20px;
+    border: 5px solid #414141;
+    box-shadow: inset 0px 0px 4px #000;
+    border-radius: 10px;
+    box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.7),
+    2px 2px 5px rgba(0, 0, 0, 0.5); /* Тени для объема */
+}
+.todolist-title {
+    margin: 0;
+}
+.todolist-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.todolist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.todolist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.todolist-checkbox {
+    width: 35px;
+    height: 35px;
+}
+.todolist-text {
+    text-transform: uppercase;
+    font-size: 24px;
+}
+
+.todolist-checkbox:checked + .todolist-text {
+    text-decoration: line-through;
+}
+/* quiz */
+.quiz-container {
+    margin: 0 auto;
+    top: 20%;
+    width: 1000px;
+    height: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #050f0f; /* Фон панели */
+    padding: 20px;
+    border: 5px solid #414141;
+    box-shadow: inset 0px 0px 4px #000;
+    border-radius: 10px;
+    box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.7),
+    2px 2px 5px rgba(0, 0, 0, 0.5); /* Тени для объема */
+}
+.quiz-title {
+    margin: 0;
+}
+.quiz-question {
+}
+.questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.question-answer-item {
+    width: 170px;
+    height: 23px;
+    text-align: center;
+    line-height: 25px;
+    position: relative;
+    display: inline-block;
+    color: #b5faff; /* Голубой неон */
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    border: 2px solid #0ff; /* Неоновая рамка */
+    background: #050f0f; /* Темный фон */
+    transition: 0.1s ease-in-out;
+}
+.question-answer-item:hover {
+    color: #fff;
+    border: 2px solid #fff;
+    cursor: pointer;
+}
+.quiz-answer {
+}
+/* frames */
+.frame-container{
+    margin: 0 auto;
+    top: 20%;
+    width: 1000px;
+    height: 500px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #050f0f; /* Фон панели */
+    padding: 20px;
+    border: 5px solid #414141;
+    box-shadow: inset 0px 0px 4px #000;
+    border-radius: 10px;
+    box-shadow:
+    inset -2px -2px 5px rgba(0, 0, 0, 0.7),
+    2px 2px 5px rgba(0, 0, 0, 0.5); /* Тени для объема */
+}
+.frame-container iframe {
+    width: 50%;
+    height: 100%;
+    border: none;
+    pointer-events: all;
+}
+
+#language-switcher {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    bottom: 120px;
+    left: 100px;
+    
+}
+
+#language-switcher > button {
+    color: #b5faff; /* Голубой неон */
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    border: 2px solid #0ff; /* Неоновая рамка */
+    background: #050f0f; /* Темный фон */
+    transition: 0.1s ease-in-out;
+}
+#language-switcher > button:hover {
+    color: #fff;
+    border: 2px solid #fff;
+    cursor: pointer;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="todolist-container">
+        <h2 class="todolist-title">To-do List:</h2>
+        <div class="todolist-wrapper">
+            <ul class="todolist">
+                <li class="todolist-item">
+                    <input type="checkbox" class="todolist-checkbox">
+                    <span class="todolist-text">Give them guns</span>
+                </li>
+                <li class="todolist-item">
+                    <input type="checkbox" class="todolist-checkbox">
+                    <span class="todolist-text">Give them justice</span>
+                </li>
+                <li class="todolist-item">
+                    <input type="checkbox" class="todolist-checkbox">
+                    <span class="todolist-text">Save their kids</span>
+                </li>
+            </ul>
+        </div>
+        <a href="/index.html" class="menu-btn">Back</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".menu-btn");
+    const checkboxes = document.querySelectorAll(".todolist-checkbox");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
+            
+            const audio = new Audio("/assets/music/sounds/click_back.wav");
+            audio.volume = 0.1;
+            audio.play();
+
+            setTimeout(() => {
+                window.location.href = button.href;
+            }, 21);
+        });
+    });
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+            const audio = new Audio("/assets/music/sounds/decisions_ui_checkbox_01.wav");
+            audio.volume = 0.1;
+            audio.play();
+        });
+    });
+});
+
+    </script>
+</body>
+</html>
