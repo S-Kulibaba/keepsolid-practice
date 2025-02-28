@@ -1,6 +1,6 @@
 # Website Documentation
 
-This website is a single-page application (SPA) with dynamic content loading and support for multiple languages. Below is an overview of the site structure and a description of the main sections.
+This website is a single-page application (SPA) with dynamic content loading and support for multiple languages. Below is an overview of the site structure and a description of the main sections. Link: https://keep-solid-practice-kulibaba.netlify.app
 
 ---
 
